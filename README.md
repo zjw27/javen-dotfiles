@@ -15,7 +15,7 @@ A lightweight terminal setup for Debian and Ubuntu servers.
 ## Installation
 
 ```bash
-git clone https://github.com/YOUR_NAME/javen-dotfiles.git
+git clone https://github.com/zjw27/javen-dotfiles.git
 cd javen-dotfiles
 ./install.sh
 source ~/.bashrc
