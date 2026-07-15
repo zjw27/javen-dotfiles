@@ -1,0 +1,62 @@
+########################################
+# Javen Dotfiles v0.1
+########################################
+
+########################################
+# Prompt — Nord-ish
+########################################
+
+PS1='\[\e[38;5;180m\]\u\[\e[38;5;244m\]@\[\e[38;5;109m\]\h\[\e[38;5;244m\]:\[\e[38;5;110m\]\w\[\e[38;5;180m\]\#\[\e[0m\] '
+
+########################################
+# Theme
+########################################
+
+export BAT_THEME="Nord"
+export LESS="-R"
+
+export GREP_COLORS='ms=38;5;180:mc=38;5;180:fn=38;5;109:ln=38;5;244:bn=38;5;244:se=38;5;180'
+
+########################################
+# Aliases
+########################################
+
+if command -v batcat >/dev/null 2>&1; then
+    alias bat='batcat'
+fi
+
+alias ll='ls -lah --color=auto'
+alias grep='grep --color=auto'
+
+if command -v grc >/dev/null 2>&1; then
+    alias ping='grc ping'
+    alias ip='grc ip'
+    alias df='grc df'
+    alias free='grc free'
+fi
+
+########################################
+# Log helpers
+########################################
+
+jlog() {
+    if ! command -v ccze >/dev/null 2>&1; then
+        echo "ccze is not installed."
+        return 1
+    fi
+
+    if [[ -z "${1:-}" ]]; then
+        journalctl -n 100 --no-pager | ccze -A
+    else
+        journalctl -u "$1" -n 100 --no-pager | ccze -A
+    fi
+}
+
+jfollow() {
+    if [[ -z "${1:-}" ]]; then
+        echo "Usage: jfollow <service>"
+        return 1
+    fi
+
+    journalctl -u "$1" -f | ccze -A
+}
