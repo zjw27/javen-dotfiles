@@ -158,6 +158,55 @@ dashboard() {
 }
 
 ########################################
+# Javen update 
+########################################
+
+javen() {
+
+    case "$1" in
+
+        update)
+
+            echo
+            echo "Updating Javen Toolkit..."
+            echo
+
+            TMP_FILE=$(mktemp)
+
+            if curl -fsSL \
+                "https://raw.githubusercontent.com/zjw27/javen-dotfiles/main/javenrc" \
+                -o "$TMP_FILE"
+            then
+                mv "$TMP_FILE" ~/.javenrc
+
+                echo "✓ javenrc updated."
+                echo
+
+                source ~/.bashrc
+            else
+                rm -f "$TMP_FILE"
+
+                echo "✗ Update failed."
+            fi
+
+            ;;
+
+        *)
+
+            echo
+            echo "Javen Toolkit"
+            echo
+            echo "Usage:"
+            echo "  javen update"
+            echo
+
+            ;;
+
+    esac
+
+}
+
+########################################
 # vivid themes
 ########################################
 
