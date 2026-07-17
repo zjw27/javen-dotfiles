@@ -153,6 +153,23 @@ dashboard() {
     printf "\e[38;5;110m %-10s\e[0m %s\n" "Time" "$NOW"
     printf "\e[38;5;110m %-10s\e[0m %s\n" "User" "$USERNAME"
     echo
+
+if [ -f ~/.javen-quotes ]; then
+
+    QUOTE_LINE=$(shuf -n 1 ~/.javen-quotes)
+
+    AUTHOR=$(echo "$QUOTE_LINE" | cut -d "|" -f1)
+    TEXT=$(echo "$QUOTE_LINE" | cut -d "|" -f2)
+
+    echo "Reflection"
+    echo
+
+    echo "\"$TEXT\""
+    echo
+    echo "— $AUTHOR"
+
+fi
+    echo
     echo -e "\e[38;5;110m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\e[0m"
     echo
 }
