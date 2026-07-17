@@ -165,7 +165,6 @@ if [ -f ~/.javen-quotes ]; then
     echo
 
     echo "\"$TEXT\""
-    echo
     echo "— $AUTHOR"
 
 fi
