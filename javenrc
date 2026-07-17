@@ -171,34 +171,33 @@ javen() {
             echo "Updating Javen Toolkit..."
             echo
 
-            TMP_FILE=$(mktemp)
+            TMP_DIR=$(mktemp -d)
 
             if curl -fsSL \
-                "https://raw.githubusercontent.com/zjw27/javen-dotfiles/main/javenrc" \
-                -o "$TMP_FILE"
+            "https://raw.githubusercontent.com/zjw27/javen-dotfiles/main/javenrc" \
+            -o "$TMP_DIR/javenrc" &&
+            curl -fsSL \
+            "https://raw.githubusercontent.com/zjw27/javen-dotfiles/main/quote.txt" \
+            -o "$TMP_DIR/quote.txt"
             then
-                mv "$TMP_FILE" ~/.javenrc
 
-                echo "✓ javenrc updated."
+                mv "$TMP_DIR/javenrc" ~/.javenrc
+                mv "$TMP_DIR/quote.txt" ~/.javen-quotes
+
+                rm -rf "$TMP_DIR"
+
+                echo "✓ Javen Toolkit updated."
                 echo
 
                 source ~/.bashrc
+
             else
-                rm -f "$TMP_FILE"
+
+                rm -rf "$TMP_DIR"
 
                 echo "✗ Update failed."
+
             fi
-
-            ;;
-
-        *)
-
-            echo
-            echo "Javen Toolkit"
-            echo
-            echo "Usage:"
-            echo "  javen update"
-            echo
 
             ;;
 
