@@ -1,62 +1,121 @@
 ########################################
-# Javen Dotfiles v0.1
+# Javen Toolkit
+# Version: v1.0
 ########################################
 
 ########################################
-# Prompt — Nord-ish
+# Prompt
 ########################################
 
-PS1='\[\e[38;5;180m\]\u\[\e[38;5;244m\]@\[\e[38;5;109m\]\h\[\e[38;5;244m\]:\[\e[38;5;110m\]\w\[\e[38;5;180m\]\#\[\e[0m\] '
+PS1='\[\e[38;5;223m\]\u@\h\[\e[0m\]:\[\e[38;5;110m\]\w\[\e[0m\] \[\e[38;5;151m\]>\[\e[0m\] '
 
 ########################################
-# Theme
+# History
+########################################
+
+HISTSIZE=5000
+HISTFILESIZE=5000
+
+########################################
+# Environment
 ########################################
 
 export BAT_THEME="Nord"
-export LESS="-R"
-
-export GREP_COLORS='ms=38;5;180:mc=38;5;180:fn=38;5;109:ln=38;5;244:bn=38;5;244:se=38;5;180'
 
 ########################################
-# Aliases
+# Alias
 ########################################
 
-if command -v batcat >/dev/null 2>&1; then
-    alias bat='batcat'
-fi
+## bat
+alias bat='batcat'
+alias cat='bat --paging=never'
 
+## ls
+alias ls='ls --color=auto'
 alias ll='ls -lah --color=auto'
+alias la='ls -A --color=auto'
+
+## grep
 alias grep='grep --color=auto'
 
-if command -v grc >/dev/null 2>&1; then
-    alias ping='grc ping'
-    alias ip='grc ip'
-    alias df='grc df'
-    alias free='grc free'
-fi
+## clear
+alias c='clear'
+alias cls='clear'
+
+## history
+alias h='history'
+
+## reload
+alias reload='source ~/.bashrc'
+alias edit='nano ~/.javenrc'
+
+## navigation
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
+## subscribe
+alias sub='cd /root/subscribe'
+alias route='nano /root/subscribe/javen-routing-v1.yaml'
+
+## update
+alias update='apt update && apt upgrade -y'
+
+## ecs 测试脚本 - 融合怪
+alias ecs='bash /root/ecs.sh'
 
 ########################################
-# Log helpers
+# grc Color
 ########################################
 
-jlog() {
-    if ! command -v ccze >/dev/null 2>&1; then
-        echo "ccze is not installed."
-        return 1
-    fi
+alias ping='grc ping'
+alias ip='grc ip'
+alias df='grc df'
+alias free='grc free'
 
-    if [[ -z "${1:-}" ]]; then
+########################################
+# Journal
+########################################
+
+jlog () {
+    if [ -z "$1" ]; then
         journalctl -n 100 --no-pager | ccze -A
     else
         journalctl -u "$1" -n 100 --no-pager | ccze -A
     fi
 }
 
-jfollow() {
-    if [[ -z "${1:-}" ]]; then
-        echo "Usage: jfollow <service>"
-        return 1
-    fi
-
+jfollow () {
     journalctl -u "$1" -f | ccze -A
 }
+
+########################################
+# Functions
+########################################
+
+unalias info 2>/dev/null
+
+info () {
+    echo
+    echo "========== Javen Server =========="
+    echo "Hostname : $(hostname)"
+    echo "IP       : $(hostname -I | awk '{print $1}')"
+    echo "Kernel   : $(uname -r)"
+    echo
+
+    echo "Memory"
+    free -h
+    echo
+
+    echo "Disk"
+    df -h /
+    echo
+}
+
+########################################
+# vivid themes
+########################################
+
+export LS_COLORS="$(vivid generate rose-pine-dawn)"
+
+echo "Javen Toolkit Loaded"
