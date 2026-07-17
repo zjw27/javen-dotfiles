@@ -113,9 +113,56 @@ info () {
 }
 
 ########################################
+# Dashboard
+########################################
+
+dashboard() {
+
+    local HOSTNAME=$(hostname)
+    local KERNEL=$(uname -r)
+    local UPSEC=$(cut -d. -f1 /proc/uptime)
+
+    local DAYS=$((UPSEC / 86400))
+    local HOURS=$(((UPSEC % 86400) / 3600))
+
+    local UPTIME
+
+    if [ "$DAYS" -gt 0 ]; then
+       UPTIME="${DAYS}d ${HOURS}h"
+    else
+        UPTIME="${HOURS}h"
+    fi
+    
+    local MEMORY=$(free -h | awk '/Mem:/ {print $3 " / " $2}')
+    local DISK=$(df -h / | awk 'NR==2 {print $3 " / " $2}')
+    local IP=$(curl -fsS ipinfo.io/ip 2>/dev/null || echo "-")
+    local NOW=$(date "+%Y-%m-%d %H:%M")
+    local USERNAME=$(whoami)
+
+    echo
+    echo -e "\e[38;5;110m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\e[0m"
+    echo
+    echo -e "           \e[38;5;223mJaven Server\e[0m"
+    echo
+    printf "\e[38;5;110m %-10s\e[0m %s\n" "Hostname" "$HOSTNAME"
+    printf "\e[38;5;110m %-10s\e[0m %s\n" "Public IP" "$IP"
+    printf "\e[38;5;110m %-10s\e[0m %s\n" "Kernel" "$KERNEL"
+    printf "\e[38;5;110m %-10s\e[0m %s\n" "Uptime" "$UPTIME"
+    printf "\e[38;5;110m %-10s\e[0m %s\n" "Memory" "$MEMORY"
+    printf "\e[38;5;110m %-10s\e[0m %s\n" "Disk" "$DISK"
+    printf "\e[38;5;110m %-10s\e[0m %s\n" "Time" "$NOW"
+    printf "\e[38;5;110m %-10s\e[0m %s\n" "User" "$USERNAME"
+    echo
+    echo -e "\e[38;5;110m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\e[0m"
+    echo
+}
+
+########################################
 # vivid themes
 ########################################
 
 export LS_COLORS="$(vivid generate rose-pine-dawn)"
 
-echo "Javen Toolkit Loaded"
+if [[ $- == *i* ]]; then
+    dashboard
+fi
